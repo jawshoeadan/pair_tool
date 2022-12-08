@@ -160,7 +160,10 @@ fn main() {
 
 fn export_pairing_file(udid: String) {
     let pairing_file = match userpref::read_pair_record(udid.clone()) {
-        Ok(p) => p,
+        Ok(mut p) => {
+            p.dict_set_item("UDID", udid.to_string().into()).unwrap();
+            p
+        }
         Err(e) => {
             error!("Failed to get pairing file: {:?}", e);
             exit_program()
